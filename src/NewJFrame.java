@@ -41,13 +41,36 @@ public class NewJFrame extends javax.swing.JFrame {
         arquivoTXT = new javax.swing.JFileChooser();
         jButton1 = new javax.swing.JButton();
         caminhoTXT = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        padrao = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jFinal = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("KMP");
 
-        jButton1.setText("jButton1");
+        jButton1.setText("DIR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Digite o Padrão:");
+
+        jLabel2.setText("Selecio o arquivo TXT");
+
+        jButton2.setText("Buscar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jFinal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFinalActionPerformed(evt);
             }
         });
 
@@ -55,47 +78,93 @@ public class NewJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(caminhoTXT, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(150, 150, 150)
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(padrao)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(caminhoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                                .addComponent(jButton1))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jFinal)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(caminhoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(231, Short.MAX_VALUE))
+                    .addComponent(caminhoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(padrao, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2)
+                    .addComponent(jFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    File arquivo; // cria um arquivo
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        arquivoTXT.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos de texto", "txt");
-        arquivoTXT.setAcceptAllFileFilterUsed(false);
-        if(arquivoTXT.getFileFilter() == null){
-            arquivoTXT.addChoosableFileFilter(filter);
-            arquivoTXT.setFileFilter(filter);
+        arquivo = selDir(); //chama a funçao selDir
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        KMP txt = new KMP(arquivo);
+        String s = null;
+        try {
+            s = txt.buscar(padrao.getText());
+        } catch (IOException ex) {
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jFinal.setText(s);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFinalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFinalActionPerformed
+    
+    private File selDir(){//funçao para selecionar arquivo txt
+        arquivoTXT.setFileSelectionMode(JFileChooser.FILES_ONLY);//busca apenas por arquivos e nao pastas
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos de texto", "txt");//filtra por arquivos txt
+        arquivoTXT.setAcceptAllFileFilterUsed(false);//nao aceita todos arquivos, apenas os do filtro
+        if(arquivoTXT.getFileFilter() == null){//cria apenas uma vez o filtro
+            arquivoTXT.addChoosableFileFilter(filter);//adiciona o filtro a janela de seleçao
+            //arquivoTXT.setFileFilter(filter);
         }
         int res = arquivoTXT.showOpenDialog(null);
         String linha = null;
-        if(res == JFileChooser.APPROVE_OPTION){
-            File arquivo = arquivoTXT.getSelectedFile();
-            linha = arquivo.getAbsolutePath();
-            caminhoTXT.setText(linha);
+        File arquivo = null;
+        if(res == JFileChooser.APPROVE_OPTION){//se a escolha por correta entra no if
+            arquivo = arquivoTXT.getSelectedFile();//grava o endereço do arquivo txt no File
+            linha = arquivo.getAbsolutePath();//pega a String do diretorio do arquivo
+            caminhoTXT.setText(linha);//adiciona o diretorio num jtext
         } 
         else{
-            JOptionPane.showMessageDialog(null, "Voce nao selecionou nenhum TXT"); 
-         } 
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
-
+            JOptionPane.showMessageDialog(null, "Voce nao selecionou nenhum TXT"); //se nao for selecionado nenhum arquivo
+         }
+        return arquivo;
+    }
     /**
      * @param args the command line arguments
      */
@@ -107,7 +176,7 @@ public class NewJFrame extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -135,5 +204,10 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JFileChooser arquivoTXT;
     private javax.swing.JTextField caminhoTXT;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JTextField jFinal;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField padrao;
     // End of variables declaration//GEN-END:variables
 }
